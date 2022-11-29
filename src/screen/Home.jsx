@@ -1,31 +1,112 @@
 import React, { useState } from 'react';
 import { Button, Card, Row, Col, ListGroup } from 'react-bootstrap';
 import Calendar, { formatDate } from 'react-calendar';
-import Clock from '../components/Clock';
+import DigitalClock from '../components/DigitalClock';
 import { createUseStyles } from 'react-jss';
 import dayjs from 'dayjs';
+import AnalogueClock from '../components/AnalogueClock';
 
 const useStyles = createUseStyles({
   customCalendar: {
     background: 'none',
     border: 'none',
     width: '90%',
-    height: 'calc(100% - 400px)',
+    height: 'calc(100% - 410px)',
     overflowY: 'auto',
   },
 });
+
 const Home = ({}) => {
   const classes = useStyles();
   const [value, onChange] = useState(new Date());
+  const [timeTable, setTimeTable] = useState([
+    /* {
+      date: '2020年10月20日',
+      time: '18時44分30妙',
+      type: '退勤',
+    }, */
+    {
+      date: '2021年10月20日',
+      time: '19時44分30妙',
+      type: '出勤',
+    },
+  ]);
+  const currentHour = new Date().getHours();
+
+  const greeting =
+    currentHour < 12
+      ? 'おはようごうざいます、'
+      : currentHour > 12 && currentHour < 18
+      ? 'こんにちは、'
+      : 'こんばんは、';
+
+  const TimeTable = ({ element }) => (
+    <ListGroup.Item className='left-lower-layout-body-activities'>
+      <span>{element.date}</span>
+      <span>{element.time}</span>
+      <Button
+        className={
+          element.type == '出勤' ? 'button-in' : 'button-out btn-danger'
+        }
+      >
+        {element.type}
+      </Button>
+    </ListGroup.Item>
+  );
+  /*  today.toLocaleDateString("ja - JP"); */
+
+  const handleClickGetIn = () => {
+    let dateObj = new Date();
+
+    let day = dateObj.getDate();
+    let month = dateObj.getMonth() + 1; //months from 1-12
+    let year = dateObj.getFullYear();
+    let newDate = year + '年' + month + '月' + day + '日';
+
+    let hour = dateObj.getHours();
+    let minute = dateObj.getMinutes();
+    let second = dateObj.getSeconds();
+    let newTime = hour + '時' + minute + '分' + second + '妙';
+
+    setTimeTable([
+      ...timeTable,
+      { date: newDate, time: newTime, type: '出勤' },
+    ]);
+  };
+
+  const handleClickGetOut = () => {
+    let dateObj = new Date();
+
+    let day = dateObj.getDate();
+    let month = dateObj.getMonth() + 1; //months from 1-12
+    let year = dateObj.getFullYear();
+    let newDate = year + '年' + month + '月' + day + '日';
+
+    let hour = dateObj.getHours();
+    let minute = dateObj.getMinutes();
+    let second = dateObj.getSeconds();
+    let newTime = hour + '時' + minute + '分' + second + '妙';
+
+    setTimeTable([
+      ...timeTable,
+      { date: newDate, time: newTime, type: '退勤' },
+    ]);
+  };
 
   return (
     <>
       <Row style={{ height: '100%' }}>
         <Col lg='8' style={{ position: 'relative' }}>
-          <h2 className='text-start fw-bold'>こんにちは、リッケイ</h2>
+          <h2 className='text-start fw-bolder'>
+            {greeting}
+            タッチャン
+          </h2>
           <Row className='left-upper-layout'>
             <Col lg='3' md='6' xs='12' className='pt-3'>
-              <Button className='custom-button purple'>
+              <Button
+                className='custom-button purple'
+                onClick={handleClickGetIn}
+              >
                 <img
                   className='mx-auto custom-img'
                   src='image/icon/start.png'
@@ -34,7 +115,7 @@ const Home = ({}) => {
               </Button>
             </Col>
             <Col lg='3' md='6' xs='12' className='pt-3'>
-              <Button className='custom-button red'>
+              <Button className='custom-button red' onClick={handleClickGetOut}>
                 <img
                   className='mx-auto custom-img'
                   src='image/icon/end.png'
@@ -68,7 +149,10 @@ const Home = ({}) => {
 
                 <Card.Body className='left-lower-layout-body'>
                   <ListGroup>
-                    <ListGroup.Item className='left-lower-layout-body-activities'>
+                    {timeTable.map((element) => (
+                      <TimeTable element={element} />
+                    ))}
+                    {/*      <ListGroup.Item className='left-lower-layout-body-activities'>
                       <span>2020年10月20日</span>
                       <span>18時44分30妙</span>
                       <Button className='button-out btn-danger'>退勤</Button>
@@ -117,7 +201,7 @@ const Home = ({}) => {
                       <span>2020年10月20日</span>
                       <span>18時44分30妙</span>
                       <Button className='button-in'>出勤</Button>
-                    </ListGroup.Item>
+                    </ListGroup.Item> */}
                   </ListGroup>
                 </Card.Body>
               </Card>
@@ -193,9 +277,11 @@ const Home = ({}) => {
                 <i className='fa-regular fa-bell'></i>
               </Button>
             </section>
-            <img src='image/icon/clock.png' className='clock-custom'></img>
-            <div className='time-custom'>
-              <Clock />
+            <div className='analogue-clock-custom'>
+              <AnalogueClock />
+            </div>
+            <div className='digital-clock-custom'>
+              <DigitalClock />
             </div>
             {/*  <h6 className='text-custom fw-bold w-75 text-start'>カレンダー</h6> */}
             <Calendar

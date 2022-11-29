@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const Clock = () => {
+const DigitalClock = () => {
   const [dateState, setDateState] = useState(new Date());
   useEffect(() => {
     setInterval(() => setDateState(new Date()), 1);
@@ -30,4 +30,4 @@ const Clock = () => {
   );
 };
 
-export default Clock;
+export default DigitalClock;

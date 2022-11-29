@@ -7,7 +7,6 @@
 }
 
 #root {
-  height: 100vh;
 }
 
 :root {
@@ -29,9 +28,9 @@ body {
   .wrapper {
     display: flex;
     text-align: center;
-    height: 100%;
     color: var(--text--color);
     background-color: var(--body-color);
+    min-height: 100vh;
 
     a {
       text-decoration: none;
@@ -48,7 +47,7 @@ body {
       transition: var(--tran-05);
       background-color: var(--sidebar-color);
       border-radius: 20px;
-      height: calc(100% - 100px);
+      min-height: calc(100% - 100px);
       width: 80px;
       margin: 60px;
       padding: 15px 0;
@@ -113,7 +112,7 @@ body {
       left: 200px;
       max-width: 100%;
       width: calc(100% - 200px);
-      height: calc(100% - 70px);
+      min-height: calc(100% - 70px);
       margin-right: 50px;
 
       .left-upper-layout {
@@ -275,31 +274,80 @@ body {
           }
         }
 
-        .clock-custom {
+        .analogue-clock-custom {
           z-index: 1;
-          width: 265px;
+
+          .clock {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(90deg, #eceef3 0%, #f1f2f7 100%)
+              url('https://assets.codepen.io/85188/clock-markers.svg') center
+              center no-repeat;
+            box-shadow: inset -12px -12px 30px rgba(255, 255, 255, 0.2),
+              inset 7px 7px 8px rgba(166, 180, 200, 0.52),
+              inset 10px 11px 30px -1px rgba(166, 180, 200, 0.71);
+            position: relative;
+            border-radius: 50%;
+            margin: auto;
+            top: -25%;
+          }
+          .h-hand,
+          .m-hand,
+          .s-hand {
+            position: absolute;
+            transform-origin: bottom;
+            border-radius: 40%;
+          }
+          .h-hand {
+            width: 16px;
+            height: 60px;
+            background: #999;
+            top: calc(50% - 60px);
+            left: calc(50% - 8px);
+            rotate: var(--degHour);
+          }
+          .m-hand {
+            width: 10px;
+            height: 75px;
+            background: #999;
+            top: calc(50% - 75px);
+            left: calc(50% - 5px);
+            rotate: var(--degMin);
+          }
+          .s-hand {
+            width: 4px;
+            height: 90px;
+            background: #0bd;
+            top: calc(50% - 90px);
+            left: calc(50% - 2px);
+            rotate: var(--degSec);
+          }
+          .s-hand::after {
+            border-radius: 50%;
+            display: block;
+            content: '';
+            width: 30px;
+            height: 30px;
+            background: #0bd;
+            position: absolute;
+            bottom: -15px;
+            left: -15px;
+          }
         }
 
-        .time-custom {
+        .digital-clock-custom {
           display: flex;
           align-items: flex-end;
           justify-content: center;
           position: absolute;
           width: 80%;
-          height: 12%;
+          height: 11%;
           top: 290px;
           background-color: #695cfe;
           color: white;
           box-shadow: 4px 4px 12px 7px rgb(212 210 248 / 50%);
           border-radius: 15px;
         }
-
-        /*   .time-custom::before {
-          content: '';
-          position: absolute;
-          background-image: url('../public/image/icon/clock.png');
-          width: 10px;
-        } */
 
         .text-custom {
         }
