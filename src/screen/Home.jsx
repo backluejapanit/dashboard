@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Card, Row, Col, ListGroup } from 'react-bootstrap';
 import Calendar, { formatDate } from 'react-calendar';
 import DigitalClock from '../components/DigitalClock';
 import { createUseStyles } from 'react-jss';
 import dayjs from 'dayjs';
 import AnalogueClock from '../components/AnalogueClock';
+import { createAPIEndpoint, ENDPOINTS, BASE_URL } from '../api'
 
 const useStyles = createUseStyles({
   customCalendar: {
@@ -13,6 +14,9 @@ const useStyles = createUseStyles({
     width: '90%',
     height: 'calc(100% - 410px)',
     overflowY: 'auto',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
   },
 });
 
@@ -25,14 +29,8 @@ const Home = ({}) => {
       time: '18時44分30妙',
       type: '退勤',
     }, */
-    {
-      date: '2021年10月20日',
-      time: '19時44分30妙',
-      type: '出勤',
-    },
   ]);
   const currentHour = new Date().getHours();
-
   const greeting =
     currentHour < 12
       ? 'おはようごうざいます、'
@@ -40,10 +38,20 @@ const Home = ({}) => {
       ? 'こんにちは、'
       : 'こんばんは、';
 
+  useEffect(() => {
+    createAPIEndpoint(ENDPOINTS.workingtime)
+      .fetch() 
+      .then(res => {
+        setTimeTable(res.data)
+        console.log(res.data)
+      })
+      .catch(err => { console.log(err); })
+  }, [])
+
   const TimeTable = ({ element }) => (
     <ListGroup.Item className='left-lower-layout-body-activities'>
-      <span>{element.date}</span>
-      <span>{element.time}</span>
+      <span>{element.newDate}</span>
+      <span>{element.newTime}</span>
       <Button
         className={
           element.type == '出勤' ? 'button-in' : 'button-out btn-danger'
@@ -70,7 +78,7 @@ const Home = ({}) => {
 
     setTimeTable([
       ...timeTable,
-      { date: newDate, time: newTime, type: '出勤' },
+      { newDate, newTime, type: '出勤' },
     ]);
   };
 
@@ -89,7 +97,7 @@ const Home = ({}) => {
 
     setTimeTable([
       ...timeTable,
-      { date: newDate, time: newTime, type: '退勤' },
+      { newDate, newTime, type: '退勤' },
     ]);
   };
 
@@ -102,7 +110,7 @@ const Home = ({}) => {
             タッチャン
           </h2>
           <Row className='left-upper-layout'>
-            <Col lg='3' md='6' xs='12' className='pt-3'>
+            <Col md='3' xs='6' className='pt-3'>
               <Button
                 className='custom-button purple'
                 onClick={handleClickGetIn}
@@ -114,7 +122,7 @@ const Home = ({}) => {
                 <div className='fw-bold'>出勤</div>
               </Button>
             </Col>
-            <Col lg='3' md='6' xs='12' className='pt-3'>
+            <Col md='3' xs='6' className='pt-3'>
               <Button className='custom-button red' onClick={handleClickGetOut}>
                 <img
                   className='mx-auto custom-img'
@@ -123,7 +131,7 @@ const Home = ({}) => {
                 <div className='fw-bold'>退勤</div>
               </Button>
             </Col>
-            <Col lg='3' md='6' xs='12' className='pt-3'>
+            <Col md='3' xs='6' className='pt-3'>
               <Button className='custom-button green'>
                 <img
                   className='mx-auto custom-img'
@@ -132,7 +140,7 @@ const Home = ({}) => {
                 <div className='fw-bold'>残業</div>
               </Button>
             </Col>
-            <Col lg='3' md='6' xs='12' className='pt-3'>
+            <Col md='3' xs='6' className='pt-3'>
               <Button className='custom-button light-blue'>
                 <img
                   className='mx-auto custom-img'
@@ -143,107 +151,57 @@ const Home = ({}) => {
             </Col>
           </Row>
           <Row className='left-lower-layout'>
-            <Col lg='8' style={{ maxHeight: '100%' }}>
+            <Col lg='8' style={{ maxHeight: '500px' }}>
               <Card style={{ border: 'none' }}>
                 <h5 className='text-start fw-bold'>最近の活動</h5>
 
                 <Card.Body className='left-lower-layout-body'>
                   <ListGroup>
-                    {timeTable.map((element) => (
-                      <TimeTable element={element} />
+                    {timeTable.map((element, index) => (
+                      <TimeTable element={element} key={index} />
                     ))}
-                    {/*      <ListGroup.Item className='left-lower-layout-body-activities'>
-                      <span>2020年10月20日</span>
-                      <span>18時44分30妙</span>
-                      <Button className='button-out btn-danger'>退勤</Button>
-                    </ListGroup.Item>
-                    <ListGroup.Item className='left-lower-layout-body-activities'>
-                      <span>2020年10月20日</span>
-                      <span>18時44分30妙</span>
-                      <Button className='button-out btn-danger'>退勤</Button>
-                    </ListGroup.Item>
-                    <ListGroup.Item className='left-lower-layout-body-activities'>
-                      <span>2020年10月20日</span>
-                      <span>18時44分30妙</span>
-                      <Button className='button-out btn-danger'>退勤</Button>
-                    </ListGroup.Item>
-                    <ListGroup.Item className='left-lower-layout-body-activities'>
-                      <span>2020年10月20日</span>
-                      <span>18時44分30妙</span>
-                      <Button className='button-out btn-danger'>退勤</Button>
-                    </ListGroup.Item>
-                    <ListGroup.Item className='left-lower-layout-body-activities'>
-                      <span>2020年10月20日</span>
-                      <span>18時44分30妙</span>
-                      <Button className='button-out btn-danger'>退勤</Button>
-                    </ListGroup.Item>
-                    <ListGroup.Item className='left-lower-layout-body-activities'>
-                      <span>2020年10月20日</span>
-                      <span>18時44分30妙</span>
-                      <Button className='button-in'>出勤</Button>
-                    </ListGroup.Item>
-                    <ListGroup.Item className='left-lower-layout-body-activities'>
-                      <span>2020年10月20日</span>
-                      <span>18時44分30妙</span>
-                      <Button className='button-in'>出勤</Button>
-                    </ListGroup.Item>
-                    <ListGroup.Item className='left-lower-layout-body-activities'>
-                      <span>2020年10月20日</span>
-                      <span>18時44分30妙</span>
-                      <Button className='button-in'>出勤</Button>
-                    </ListGroup.Item>
-                    <ListGroup.Item className='left-lower-layout-body-activities'>
-                      <span>2020年10月20日</span>
-                      <span>18時44分30妙</span>
-                      <Button className='button-in'>出勤</Button>
-                    </ListGroup.Item>
-                    <ListGroup.Item className='left-lower-layout-body-activities'>
-                      <span>2020年10月20日</span>
-                      <span>18時44分30妙</span>
-                      <Button className='button-in'>出勤</Button>
-                    </ListGroup.Item> */}
                   </ListGroup>
                 </Card.Body>
               </Card>
             </Col>
             <Col lg='4'>
-              <Card style={{ border: 'none' }}>
+              <Card className="sum" style={{ border: 'none' }}>
                 <h5 className='text-start fw-bold'>退勤統計</h5>
                 <Card.Body className='sum-body px-0'>
                   <Row>
                     <Col lg='6'>
-                      <Card className='sum-body-card'>
+                      <div className='sum-body-card'>
                         <span>出勤日</span>
-                        <h4>14日</h4>
-                      </Card>
+                        <h5>14日</h5>
+                      </div>
                     </Col>
                     <Col lg='6'>
-                      <Card className='sum-body-card'>
+                      <div className='sum-body-card'>
                         <span>土日祝</span>
-                        <h4>6日</h4>
-                      </Card>
+                        <h5>6日</h5>
+                      </div>
                     </Col>
                   </Row>
                   <Row>
                     <Col>
-                      <Card className='sum-body-card'>
+                      <div className='sum-body-card second'>
                         <span>出勤時間</span>
-                        <h4>102時30分</h4>
-                      </Card>
+                        <h5>102時30分</h5>
+                      </div>
                     </Col>
                   </Row>
                   <Row>
                     <Col lg='6'>
-                      <Card className='sum-body-card'>
+                      <div className='sum-body-card'>
                         <span>残業時間</span>
-                        <h4>10時間</h4>
-                      </Card>
+                        <h5>10時間</h5>
+                      </div>
                     </Col>
                     <Col lg='6'>
-                      <Card className='sum-body-card'>
+                      <div className='sum-body-card'>
                         <span>休暇時間</span>
-                        <h4>15時間</h4>
-                      </Card>
+                        <h5>15時間</h5>
+                      </div>
                     </Col>
                   </Row>
                 </Card.Body>
@@ -258,15 +216,15 @@ const Home = ({}) => {
               <div className='ps-4'>
                 <h5 className='text-start fw-bold m-0'>リッケイ</h5>
                 <div className='info-details'>
-                  <div className='title me-2'>
+                  <div className='info-details-chip'>
                     <i className='fa-solid fa-user me-1'></i>
                     <span>メンバー</span>
                   </div>
-                  <div className='device me-2'>
+                  <div className='info-details-chip'>
                     <i className='fa-solid fa-computer me-1'></i>
                     <span>会社のPC</span>
                   </div>
-                  <div className='location'>
+                  <div className='info-details-chip'>
                     <i className='fa-solid fa-location-dot'></i>
                     <span className='mx-1'>会社</span>
                     <i className='fa-solid fa-circle-info'></i>
@@ -283,7 +241,7 @@ const Home = ({}) => {
             <div className='digital-clock-custom'>
               <DigitalClock />
             </div>
-            {/*  <h6 className='text-custom fw-bold w-75 text-start'>カレンダー</h6> */}
+           {/*  <h6 className='text-custom w-75 text-start'>カレンダー</h6> */}
             <Calendar
               className={classes.customCalendar}
               onChange={onChange}

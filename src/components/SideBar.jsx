@@ -15,21 +15,21 @@ function SideBar() {
         <ul className='menu'>
           <li>
             <a href='/home'>
-              <i className='bx bx-home-alt icon'></i>
+              <img src="/image/icon/home.png" alt="home" />
               <div className='text'>ホーム</div>
             </a>
           </li>
 
           <li className='nav-link'>
             <a href='/user'>
-              <i className='bx bx-bar-chart-alt-2 icon'></i>
+            <img src="/image/icon/user.png" alt="home" />
               <div className='text'>ユーザー</div>
             </a>
           </li>
 
           <li className='nav-link'>
             <a href='/timesheet'>
-              <i className='bx bx-bell icon'></i>
+            <img src="/image/icon/timesheet.png" alt="home" />
               <div className='text'>
                 タイム<br></br>シート
               </div>
@@ -38,7 +38,7 @@ function SideBar() {
 
           <li className='nav-link'>
             <a href='/setting'>
-              <i className='bx bx-pie-chart-alt icon'></i>
+            <img src="/image/icon/setting.png" alt="home" />
               <div className='text'>設定</div>
             </a>
           </li>
