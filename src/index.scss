@@ -1,9 +1,9 @@
 /* Google Font Import - Poppins */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@300;500;700;900&display=swap');
 * {
   margin: 0;
   padding: 0;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'M PLUS Rounded 1c', sans-serif;
 }
 
 #root {
@@ -52,7 +52,7 @@ body {
       margin: 60px;
       padding: 15px 0;
 
-      .logo-img {
+      img {
         //custom for main logo
       }
 
@@ -71,13 +71,18 @@ body {
             height: auto;
             list-style: none;
             display: flex;
-            margin: 30px 0;
+            margin: 40px 0;
           }
 
           li a {
             align-items: center;
             width: 100%;
             transition: var(--tran-03);
+
+            img {
+              width: 25px;
+              margin: 5px;
+            }
           }
         }
 
@@ -117,11 +122,13 @@ body {
 
       .left-upper-layout {
         margin: 25px 0;
-        height: 150px;
+        height: 180px;
+        justify-content: space-around;
 
         .custom-button {
           height: 100%;
           width: 100%;
+          max-width: 160px;
           position: relative;
           background-color: white;
           color: var(--text--color);
@@ -160,9 +167,8 @@ body {
       }
 
       .left-lower-layout {
-        position: absolute;
         width: 100%;
-        height: calc(100% - 250px);
+        height: calc(100% - 260px);
 
         .card {
           height: 100%;
@@ -191,40 +197,46 @@ body {
             border-radius: 15px;
             font-weight: 500;
             align-items: center;
+            color:  var(--text--color-activities);;
 
             .button-out {
-              font-size: 14px;
+              font-size: 9px;
             }
 
             .button-in {
               background-color: var(--sidebar-color);
               border-color: var(--sidebar-color);
-              font-size: 14px;
+              font-size: 9px;
             }
           }
         }
 
-        .sum-body {
-          justify-content: space-between;
-          flex-direction: column;
-          display: flex;
+        .sum {
+          &-body {
+            justify-content: space-between;
+            flex-direction: column;
+            display: flex;
 
-          &-card {
-            position: relative;
-            background-color: white;
-            box-shadow: 4px 4px 15px 2px rgb(212 210 248 / 50%);
-            border-radius: 15px;
-
-            span {
-              position: absolute;
-              top: 10px;
-              left: 15px;
-              font-size: 12px;
-            }
-            h4 {
+            &-card {
+              height: 100%;
               position: relative;
-              top: 50%;
-              transform: translateY(-50%);
+              background-color: white;
+              box-shadow: 4px 4px 15px 2px rgb(212 210 248 / 50%);
+              border-radius: 15px;
+
+              span {
+                position: absolute;
+                top: 10px;
+                left: 15px;
+                font-size: 12px;
+              }
+
+              h5 {
+                position: relative;
+                top: 50%;
+                transform: translateY(-50%);
+                font-weight: 900;
+              }
             }
           }
         }
@@ -271,6 +283,15 @@ body {
           .info-details {
             display: flex;
             font-size: 11px;
+            color: white;
+
+            .info-details-chip {
+              background-color: var(--sidebar-color);
+              border-radius: 10px ;
+              font-size: 7px;
+              padding: 3px 6px;
+              margin: 5px;
+            }
           }
         }
 
@@ -278,9 +299,9 @@ body {
           z-index: 1;
 
           .clock {
-            width: 200px;
-            height: 200px;
-            background: linear-gradient(90deg, #eceef3 0%, #f1f2f7 100%)
+            width: 180px;
+            height: 180px;
+            background: white
               url('https://assets.codepen.io/85188/clock-markers.svg') center
               center no-repeat;
             box-shadow: inset -12px -12px 30px rgba(255, 255, 255, 0.2),
@@ -289,7 +310,7 @@ body {
             position: relative;
             border-radius: 50%;
             margin: auto;
-            top: -25%;
+            top: -20%;
           }
           .h-hand,
           .m-hand,
@@ -299,26 +320,26 @@ body {
             border-radius: 40%;
           }
           .h-hand {
-            width: 16px;
-            height: 60px;
-            background: #999;
-            top: calc(50% - 60px);
-            left: calc(50% - 8px);
+            width: 10px;
+            height: 75px;
+            background: #646E82;
+            top: calc(50% - 75px);
+            left: calc(50% - 5px);
             rotate: var(--degHour);
           }
           .m-hand {
-            width: 10px;
-            height: 75px;
-            background: #999;
-            top: calc(50% - 75px);
-            left: calc(50% - 5px);
+            width: 4px;
+            height: 90px;
+            background: #646E82;
+            top: calc(50% - 90px);
+            left: calc(50% - 2px);
             rotate: var(--degMin);
           }
           .s-hand {
-            width: 4px;
-            height: 90px;
-            background: #0bd;
-            top: calc(50% - 90px);
+            width: 3px;
+            height: 80px;
+            background: #FD251E;
+            top: calc(50% - 80px);
             left: calc(50% - 2px);
             rotate: var(--degSec);
           }
@@ -328,7 +349,7 @@ body {
             content: '';
             width: 30px;
             height: 30px;
-            background: #0bd;
+            background: #646E82;
             position: absolute;
             bottom: -15px;
             left: -15px;
@@ -341,8 +362,8 @@ body {
           justify-content: center;
           position: absolute;
           width: 80%;
-          height: 11%;
-          top: 290px;
+          height: 140px;
+          top: 260px;
           background-color: #695cfe;
           color: white;
           box-shadow: 4px 4px 12px 7px rgb(212 210 248 / 50%);
@@ -350,28 +371,93 @@ body {
         }
 
         .text-custom {
+          position: relative;
+          top: 50px;
+          left:-20px;
+          font-weight: 900;
         }
       }
     }
   }
 
   /* ===== Responsive ===== */
+  @media only screen and (min-width: 992px) and (max-width: 1199px)  {
+
+      .left-upper-layout{
+        height: 150px !important;
+      }
+
+      .left-lower-layout-body-activities {
+        font-size: 12px;
+      }
+
+      .sum {
+        max-height: 350px ;
+
+        .sum-body-card span {
+          top: 4px !important;
+          left: 6px !important;
+          font-size: 8px !important;
+        }
+  
+        .sum-body-card h5 {
+          font-size: 1rem !important;
+        }
+      }
+
+    .right-calendar-layout {
+      font-size: 10px !important;
+      max-height: 750px !important;
+
+      .profile-custom .info-details-chip {
+        font-size: 5px !important;
+      }
+    }
+  }
+
   @media only screen and (max-width: 991px) {
     .container {
       margin-right: auto !important;
     }
+
     .sidebar {
       display: none;
     }
 
-    .left-upper-layout {
+    .right-calendar-layout {
+      height: 750px !important;
+    }
+    
+    .sum-body {
       height: 300px !important;
+      flex-direction: row !important;
+
+      .row {
+        width: 100% !important;
+        height: 100px !important;
+        margin: 5px !important;
+
+        .col-lg-6 {
+          height: 100% !important;
+          padding: 10px !important;
+        }
+      }
+
+      &-card.second{
+        top: 50px !important;
+      }
     }
   }
 
   @media only screen and (max-width: 767px) {
     .left-upper-layout {
-      height: 600px !important;
+      height: 300px !important;
+    }
+  }
+
+  @media only screen and (max-width: 600px) {
+    .wrapper {
+      visibility: hidden;
     }
   }
 }
