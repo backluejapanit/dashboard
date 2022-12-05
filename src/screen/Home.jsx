@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Card, Row, Col, ListGroup } from 'react-bootstrap';
-import Calendar, { formatDate } from 'react-calendar';
-import DigitalClock from '../components/DigitalClock';
+/* import { Alert } from '@mui/material'; */
+
+/* ------ref component */
+import Calendar from 'react-calendar';
 import { createUseStyles } from 'react-jss';
 import dayjs from 'dayjs';
 import AnalogueClock from '../components/AnalogueClock';
+import DigitalClock from '../components/DigitalClock';
+import TimeTable from '../components/TimeTable';
+
+/* ------backend------ */
 import { createAPIEndpoint, ENDPOINTS, BASE_URL } from '../api'
 
 const useStyles = createUseStyles({
@@ -17,10 +23,11 @@ const useStyles = createUseStyles({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
+    fontFamily: 'M PLUS Rounded 1c',
   },
 });
 
-const Home = ({}) => {
+const Home = () => {
   const classes = useStyles();
   const [value, onChange] = useState(new Date());
   const [timeTable, setTimeTable] = useState([
@@ -43,27 +50,11 @@ const Home = ({}) => {
       .fetch() 
       .then(res => {
         setTimeTable(res.data)
-        console.log(res.data)
       })
       .catch(err => { console.log(err); })
   }, [])
 
-  const TimeTable = ({ element }) => (
-    <ListGroup.Item className='left-lower-layout-body-activities'>
-      <span>{element.newDate}</span>
-      <span>{element.newTime}</span>
-      <Button
-        className={
-          element.type == '出勤' ? 'button-in' : 'button-out btn-danger'
-        }
-      >
-        {element.type}
-      </Button>
-    </ListGroup.Item>
-  );
-  /*  today.toLocaleDateString("ja - JP"); */
-
-  const handleClickGetIn = () => {
+  const handleClick = (element) => {
     let dateObj = new Date();
 
     let day = dateObj.getDate();
@@ -76,29 +67,24 @@ const Home = ({}) => {
     let second = dateObj.getSeconds();
     let newTime = hour + '時' + minute + '分' + second + '妙';
 
-    setTimeTable([
-      ...timeTable,
-      { newDate, newTime, type: '出勤' },
-    ]);
-  };
+    if (element === 'getIn') {
+      setTimeTable([
+        ...timeTable,
+        { newDate, newTime, type: '出勤' },
+      ]);
+  
+      createAPIEndpoint(ENDPOINTS.workingtime)
+        .post({newDate, newTime, type: '出勤'})
 
-  const handleClickGetOut = () => {
-    let dateObj = new Date();
-
-    let day = dateObj.getDate();
-    let month = dateObj.getMonth() + 1; //months from 1-12
-    let year = dateObj.getFullYear();
-    let newDate = year + '年' + month + '月' + day + '日';
-
-    let hour = dateObj.getHours();
-    let minute = dateObj.getMinutes();
-    let second = dateObj.getSeconds();
-    let newTime = hour + '時' + minute + '分' + second + '妙';
-
-    setTimeTable([
-      ...timeTable,
-      { newDate, newTime, type: '退勤' },
-    ]);
+    } else if (element === 'getOut') {
+      setTimeTable([
+        ...timeTable,
+        { newDate, newTime, type: '退勤' },
+      ]);
+  
+      createAPIEndpoint(ENDPOINTS.workingtime)
+        .post({newDate, newTime, type: '退勤'})
+    }
   };
 
   return (
@@ -113,20 +99,21 @@ const Home = ({}) => {
             <Col md='3' xs='6' className='pt-3'>
               <Button
                 className='custom-button purple'
-                onClick={handleClickGetIn}
+                onClick={() => handleClick('getIn')}
               >
                 <img
                   className='mx-auto custom-img'
                   src='image/icon/start.png'
+                  alt='start'
                 ></img>
                 <div className='fw-bold'>出勤</div>
               </Button>
             </Col>
             <Col md='3' xs='6' className='pt-3'>
-              <Button className='custom-button red' onClick={handleClickGetOut}>
+              <Button className='custom-button red' onClick={() => handleClick('getOut')}>
                 <img
                   className='mx-auto custom-img'
-                  src='image/icon/end.png'
+                  src='image/icon/end.png' alt="end"
                 ></img>
                 <div className='fw-bold'>退勤</div>
               </Button>
@@ -135,7 +122,7 @@ const Home = ({}) => {
               <Button className='custom-button green'>
                 <img
                   className='mx-auto custom-img'
-                  src='image/icon/plus.png'
+                  src='image/icon/plus.png' alt="plus"
                 ></img>
                 <div className='fw-bold'>残業</div>
               </Button>
@@ -144,7 +131,7 @@ const Home = ({}) => {
               <Button className='custom-button light-blue'>
                 <img
                   className='mx-auto custom-img'
-                  src='image/icon/pause.png'
+                  src='image/icon/pause.png' alt="pause"
                 ></img>
                 <div className='fw-bold'>休暇</div>
               </Button>
@@ -157,7 +144,7 @@ const Home = ({}) => {
 
                 <Card.Body className='left-lower-layout-body'>
                   <ListGroup>
-                    {timeTable.map((element, index) => (
+                    {timeTable.slice().reverse().map((element, index) => (
                       <TimeTable element={element} key={index} />
                     ))}
                   </ListGroup>
