@@ -1,0 +1,16 @@
+USE [DashboardDb]
+GO
+SET IDENTITY_INSERT [dbo].[WorkingTimes] ON 
+GO
+INSERT [dbo].[WorkingTimes] ([TimeId], [NewDate], [NewTime], [Type]) VALUES (4, N'2024年10月20日', N'19時44分30妙', N'出勤')
+GO
+INSERT [dbo].[WorkingTimes] ([TimeId], [NewDate], [NewTime], [Type]) VALUES (5, N'2025年10月20日', N'19時44分30妙', N'出勤')
+GO
+INSERT [dbo].[WorkingTimes] ([TimeId], [NewDate], [NewTime], [Type]) VALUES (6, N'2026年10月20日', N'19時44分30妙', N'通勤')
+GO
+INSERT [dbo].[WorkingTimes] ([TimeId], [NewDate], [NewTime], [Type]) VALUES (7, N'2027年10月20日', N'19時44分30妙', N'通勤')
+GO
+INSERT [dbo].[WorkingTimes] ([TimeId], [NewDate], [NewTime], [Type]) VALUES (8, N'2028年10月20日', N'19時44分30妙', N'通勤')
+GO
+SET IDENTITY_INSERT [dbo].[WorkingTimes] OFF
+GO
