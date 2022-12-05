@@ -14,7 +14,8 @@ function App() {
         <SideBar />
         <Container className='mt-5 mb-3'>
           <Routes>
-            <Route path='/home' element={<Home />} />
+            <Route path='/' element={<Home />} />
+            {/* nếu không được thì dùng switch */}
             {/*    <Route path='/user' element={<User />} />
             <Route path='/timesheet' element={<TimeSheet  />} />
             <Route path='/setting' element={<Setting />} /> */}

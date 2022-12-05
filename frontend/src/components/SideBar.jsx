@@ -1,46 +1,47 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function SideBar() {
   return (
     <nav className='sidebar'>
       <header>
         <div className='logo-img'>
-          <a href='/'>
+          <Link to='/'>
             <img src='/favicon.png' alt='logo' />
-          </a>
+          </Link>
         </div>
       </header>
 
       <div className='menu-bar'>
         <ul className='menu'>
           <li>
-            <a href='/home'>
+            <Link to='/'>
               <img src="/image/icon/home.png" alt="home" />
               <div className='text'>ホーム</div>
-            </a>
+            </Link>
           </li>
 
           <li className='nav-link'>
-            <a href='/user'>
+            <Link to='/user'>
             <img src="/image/icon/user.png" alt="home" />
               <div className='text'>ユーザー</div>
-            </a>
+            </Link>
           </li>
 
           <li className='nav-link'>
-            <a href='/timesheet'>
+            <Link to='/timesheet'>
             <img src="/image/icon/timesheet.png" alt="home" />
               <div className='text'>
                 タイム<br></br>シート
               </div>
-            </a>
+            </Link>
           </li>
 
           <li className='nav-link'>
-            <a href='/setting'>
+            <Link to='/setting'>
             <img src="/image/icon/setting.png" alt="home" />
               <div className='text'>設定</div>
-            </a>
+            </Link>
           </li>
         </ul>
 

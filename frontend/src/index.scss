@@ -255,8 +255,38 @@ body {
         .react-calendar__navigation__next2-button {
           visibility: hidden;
         } */
+
+        .react-calendar button:enabled:hover, .react-calendar__tile--active, .react-calendar__tile--hasActive {
+          background-color: transparent;
+          abbr {
+            background-color: #ffafbd;
+            transition: 0.6s;
+          }
+        }
+
+        .react-calendar__tile--now {
+          background-color: transparent;
+          abbr {
+            background-color: var(--sidebar-color);
+            transition: 0.6s;
+          }
+        }
+
         abbr {
           text-decoration: none;
+          padding: 7px;
+          border-radius: 50%;
+          color: var(--text--color-activities);
+        }
+
+        .react-calendar__tile--now {
+          position: relative;
+        }
+
+        .react-calendar__tile--now::before {
+          content: "";
+          position: absolute;
+          /* notdoneyet */
         }
 
         .profile-custom {
