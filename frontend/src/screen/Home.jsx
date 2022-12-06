@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Card, Row, Col, ListGroup } from 'react-bootstrap';
-/* import { Alert } from '@mui/material'; */
+import { Button, Card, Row, Col, ListGroup, Table } from 'react-bootstrap';
 
 /* ------ref component */
 import Calendar from 'react-calendar';
@@ -30,14 +29,14 @@ const useStyles = createUseStyles({
 const Home = () => {
   const classes = useStyles();
   const [value, onChange] = useState(new Date());
-  const [timeTable, setTimeTable] = useState([
-    /* {
-      date: '2020年10月20日',
-      time: '18時44分30妙',
-      type: '退勤',
-    }, */
-  ]);
+  const [timeTable, setTimeTable] = useState([]);
+  const [button, setButton] = useState('getOut');
+  const [workingDay, setWorkingDay] = useState(0);
+
   const currentHour = new Date().getHours();
+  const startDate = new Date('01/01/2021');
+  const endDate = new Date('12/31/2021');
+
   const greeting =
     currentHour < 12
       ? 'おはようごうざいます、'
@@ -56,36 +55,60 @@ const Home = () => {
 
   const handleClick = (element) => {
     let dateObj = new Date();
+    let dateCheckDublicate = new Date().toLocaleDateString();
 
     let day = dateObj.getDate();
     let month = dateObj.getMonth() + 1; //months from 1-12
     let year = dateObj.getFullYear();
     let newDate = year + '年' + month + '月' + day + '日';
+    let dateCheck = `${month}/${day}/${year}`;
+    
 
     let hour = dateObj.getHours();
     let minute = dateObj.getMinutes();
     let second = dateObj.getSeconds();
     let newTime = hour + '時' + minute + '分' + second + '妙';
 
+    setButton(element)
+
     if (element === 'getIn') {
+      if (!timeTable.some((obj) => obj.dateCheck === dateCheckDublicate)) {
+        setWorkingDay(workingDay + 1);
+      }
       setTimeTable([
         ...timeTable,
-        { newDate, newTime, type: '出勤' },
+        { newDate, newTime, type: '出勤', dateCheck },
       ]);
   
       createAPIEndpoint(ENDPOINTS.workingtime)
-        .post({newDate, newTime, type: '出勤'})
+        .post({newDate, newTime, type: '出勤', dateCheck})
 
     } else if (element === 'getOut') {
       setTimeTable([
         ...timeTable,
-        { newDate, newTime, type: '退勤' },
+        { newDate, newTime, type: '退勤', dateCheck},
       ]);
   
       createAPIEndpoint(ENDPOINTS.workingtime)
-        .post({newDate, newTime, type: '退勤'})
+        .post({newDate, newTime, type: '退勤', dateCheck})
     }
   };
+
+  const getBusinessDatesCount = (startDate, endDate) => {
+    let count = 0;
+    const curDate = new Date(startDate.getTime());
+    console.log(curDate)
+    console.log(startDate)
+    console.log(endDate)
+
+    while (curDate <= endDate) {
+        const dayOfWeek = curDate.getDay();
+        if(dayOfWeek === 0 || dayOfWeek === 6) count++;
+        curDate.setDate(curDate.getDate() + 1);
+    }
+    console.log(count)
+    return count;
+  }
 
   return (
     <>
@@ -100,6 +123,7 @@ const Home = () => {
               <Button
                 className='custom-button purple'
                 onClick={() => handleClick('getIn')}
+                disabled={button === 'getIn'}
               >
                 <img
                   className='mx-auto custom-img'
@@ -110,7 +134,11 @@ const Home = () => {
               </Button>
             </Col>
             <Col md='3' xs='6' className='pt-3'>
-              <Button className='custom-button red' onClick={() => handleClick('getOut')}>
+              <Button 
+                className='custom-button red' 
+                onClick={() => handleClick('getOut')}
+                disabled={button === 'getOut'}
+              >
                 <img
                   className='mx-auto custom-img'
                   src='image/icon/end.png' alt="end"
@@ -138,7 +166,7 @@ const Home = () => {
             </Col>
           </Row>
           <Row className='left-lower-layout'>
-            <Col lg='8' style={{ maxHeight: '500px' }}>
+            <Col lg='8' style={{ maxHeight: '400px' }}>
               <Card style={{ border: 'none' }}>
                 <h5 className='text-start fw-bold'>最近の活動</h5>
 
@@ -159,13 +187,13 @@ const Home = () => {
                     <Col lg='6'>
                       <div className='sum-body-card'>
                         <span>出勤日</span>
-                        <h5>14日</h5>
+                        <h5>{workingDay}日</h5>
                       </div>
                     </Col>
                     <Col lg='6'>
                       <div className='sum-body-card'>
                         <span>土日祝</span>
-                        <h5>6日</h5>
+                        <h5>{getBusinessDatesCount(startDate, endDate)}日</h5>
                       </div>
                     </Col>
                   </Row>
@@ -181,13 +209,13 @@ const Home = () => {
                     <Col lg='6'>
                       <div className='sum-body-card'>
                         <span>残業時間</span>
-                        <h5>10時間</h5>
+                        <h5>0時間</h5>
                       </div>
                     </Col>
                     <Col lg='6'>
                       <div className='sum-body-card'>
                         <span>休暇時間</span>
-                        <h5>15時間</h5>
+                        <h5>0時間</h5>
                       </div>
                     </Col>
                   </Row>
