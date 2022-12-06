@@ -6,9 +6,6 @@
   font-family: 'M PLUS Rounded 1c', sans-serif;
 }
 
-#root {
-}
-
 :root {
   /* ===== Colors ===== */
   --body-color: #f5f5f5;
@@ -51,10 +48,6 @@ body {
       width: 80px;
       margin: 60px;
       padding: 15px 0;
-
-      img {
-        //custom for main logo
-      }
 
       .menu-bar {
         height: calc(100% - 55px);
@@ -256,7 +249,25 @@ body {
           visibility: hidden;
         } */
 
-        .react-calendar button:enabled:hover, .react-calendar__tile--active, .react-calendar__tile--hasActive {
+        .react-calendar__viewContainer button:enabled:hover {
+          background-color: transparent;
+          cursor: default;
+          abbr:hover {
+            background-color: #ffafbd;
+            cursor: pointer !important;
+            transition: 0.6s;
+          }
+        }
+
+        .react-calendar__month-view__days button {
+          cursor: default;
+        }
+
+        .react-calendar__navigation button {
+          cursor: pointer;
+        }
+
+        .react-calendar__tile--active, .react-calendar__tile--hasActive {
           background-color: transparent;
           abbr {
             background-color: #ffafbd;
@@ -266,21 +277,11 @@ body {
 
         .react-calendar__tile--now {
           background-color: transparent;
+          position: relative;
           abbr {
             background-color: var(--sidebar-color);
             transition: 0.6s;
           }
-        }
-
-        abbr {
-          text-decoration: none;
-          padding: 7px;
-          border-radius: 50%;
-          color: var(--text--color-activities);
-        }
-
-        .react-calendar__tile--now {
-          position: relative;
         }
 
         .react-calendar__tile--now::before {
@@ -288,6 +289,13 @@ body {
           position: absolute;
           /* notdoneyet */
         }
+
+        abbr {
+          text-decoration: none;
+          padding: 1px;
+          border-radius: 50%;
+          color: var(--text--color-activities);
+        }  
 
         .profile-custom {
           height: 100px;
