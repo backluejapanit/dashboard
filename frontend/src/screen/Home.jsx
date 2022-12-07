@@ -30,12 +30,13 @@ const Home = () => {
   const classes = useStyles();
   const [value, onChange] = useState(new Date());
   const [timeTable, setTimeTable] = useState([]);
-  const [button, setButton] = useState('getOut');
+  const [clicked, setClicked] = useState(2);
   const [workingDay, setWorkingDay] = useState(0);
 
   const currentHour = new Date().getHours();
   const startDate = new Date('01/01/2021');
   const endDate = new Date('12/31/2021');
+  const lastObj = timeTable[timeTable.length - 1];
 
   const greeting =
     currentHour < 12
@@ -49,6 +50,7 @@ const Home = () => {
       .fetch() 
       .then(res => {
         setTimeTable(res.data)
+        console.log(res.data)
       })
       .catch(err => { console.log(err); })
   }, [])
@@ -56,6 +58,7 @@ const Home = () => {
   const handleClick = (element) => {
     let dateObj = new Date();
     let dateCheckDublicate = new Date().toLocaleDateString();
+    let totalHour;
 
     let day = dateObj.getDate();
     let month = dateObj.getMonth() + 1; //months from 1-12
@@ -69,44 +72,39 @@ const Home = () => {
     let second = dateObj.getSeconds();
     let newTime = hour + '時' + minute + '分' + second + '妙';
 
-    setButton(element)
-
-    if (element === 'getIn') {
-      if (!timeTable.some((obj) => obj.dateCheck === dateCheckDublicate)) {
+      if (element === 'getIn' && (!timeTable.some((obj) => obj.dateCheck === dateCheckDublicate))) {
+        setClicked(1)
         setWorkingDay(workingDay + 1);
+        setTimeTable([
+          ...timeTable,
+          { newDate, newTime, type: '出勤', dateCheck },
+        ]);
+        createAPIEndpoint(ENDPOINTS.workingtime)
+          .post({newDate, newTime, type: '出勤', dateCheck, clicked: 1, latestTimestamp: dateObj, totalHour: 0})
       }
-      setTimeTable([
-        ...timeTable,
-        { newDate, newTime, type: '出勤', dateCheck },
-      ]);
-  
-      createAPIEndpoint(ENDPOINTS.workingtime)
-        .post({newDate, newTime, type: '出勤', dateCheck})
 
-    } else if (element === 'getOut') {
-      setTimeTable([
-        ...timeTable,
-        { newDate, newTime, type: '退勤', dateCheck},
-      ]);
-  
-      createAPIEndpoint(ENDPOINTS.workingtime)
-        .post({newDate, newTime, type: '退勤', dateCheck})
-    }
+      if (element === 'getOut' /* && (!timeTable.some((obj) => obj.dateCheck === dateCheckDublicate) || !timeTable.some((obj) => obj.type === '退勤')) */) {
+        setClicked(2)
+        totalHour = Math.floor(Math.abs(dateObj - lastObj.latestTimestamp)/36000)
+        /* 2 cái date ở trên khác format nhau nên cách hay nhất là gửi hết xuống backend rồi DateDiff */
+        setTimeTable([
+          ...timeTable,
+          { newDate, newTime, type: '退勤', dateCheck},
+        ]);
+        createAPIEndpoint(ENDPOINTS.workingtime)
+          .post({newDate, newTime, type: '退勤', dateCheck, clicked: 2, latestTimestamp: ''})
+      }
   };
 
   const getBusinessDatesCount = (startDate, endDate) => {
     let count = 0;
     const curDate = new Date(startDate.getTime());
-    console.log(curDate)
-    console.log(startDate)
-    console.log(endDate)
 
     while (curDate <= endDate) {
         const dayOfWeek = curDate.getDay();
         if(dayOfWeek === 0 || dayOfWeek === 6) count++;
         curDate.setDate(curDate.getDate() + 1);
     }
-    console.log(count)
     return count;
   }
 
@@ -123,7 +121,7 @@ const Home = () => {
               <Button
                 className='custom-button purple'
                 onClick={() => handleClick('getIn')}
-                disabled={button === 'getIn'}
+                disabled={lastObj?.clicked ? lastObj?.clicked === 1 : clicked === 1}
               >
                 <img
                   className='mx-auto custom-img'
@@ -137,7 +135,7 @@ const Home = () => {
               <Button 
                 className='custom-button red' 
                 onClick={() => handleClick('getOut')}
-                disabled={button === 'getOut'}
+                disabled={lastObj?.clicked ? lastObj?.clicked === 2 : clicked === 2}
               >
                 <img
                   className='mx-auto custom-img'
@@ -201,7 +199,7 @@ const Home = () => {
                     <Col>
                       <div className='sum-body-card second'>
                         <span>出勤時間</span>
-                        <h5>102時30分</h5>
+                        <h5>{lastObj?.totalHour || 0}時</h5>
                       </div>
                     </Col>
                   </Row>
